@@ -62,15 +62,18 @@ def _cli_parse_file(path: pathlib.Path, files: dict[str, list]):
             fg="yellow",
             err=True,
         )
-        return
+        return 1
     for module in modules:
         files[module].append(path)
+    return 0
 
 
 def _cli_parse_dir(path: pathlib.Path, files: dict[str, list]):
-    for p in pathlib.Path(path).rglob('*.py'):
+    num_errors = 0
+    for p in pathlib.Path(path).rglob("*.py"):
         if p.is_file():
-            _cli_parse_file(p, files)
+            num_errors += _cli_parse_file(p, files)
+    return num_errors
 
 
 @click.command()
@@ -118,11 +121,12 @@ def _cli(
     Directories specified by PATHS are searched recursively for *.py files.
     """
     files = defaultdict(list)
+    num_errors = 0
     for path in paths:
         if path.is_dir():
-            _cli_parse_dir(path, files)
+            num_errors += _cli_parse_dir(path, files)
         else:
-            _cli_parse_file(path, files)
+            num_errors += _cli_parse_file(path, files)
 
     files = dict(files)
     imports = files.keys()
@@ -148,6 +152,9 @@ def _cli(
                 click.echo("\n\t".join(lines))
         else:
             click.echo("\n".join(sorted(imports)))
+
+    if num_errors:
+        raise click.ClickException(f"{num_errors} files could not be parsed.")
 
 
 if __name__ == "__main__":
