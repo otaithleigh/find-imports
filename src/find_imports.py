@@ -1,4 +1,5 @@
 import ast
+import pathlib
 import sys
 from collections import defaultdict
 from typing import Iterable
@@ -9,7 +10,7 @@ __all__ = ["parse_file", "parse_source"]
 __version__ = "0.1.0"
 
 
-def parse_file(path: str):
+def parse_file(path: str | pathlib.Path):
     """Open a Python source file and return the modules it imports."""
     with open(path) as f:
         return parse_source(f.read(), path)
@@ -52,10 +53,30 @@ def filter_modules(modules: Iterable[str], ignore: Iterable[str]):
     return {module for module in modules if module.partition(".")[0] not in set(ignore)}
 
 
+def _cli_parse_file(path: pathlib.Path, files: dict[str, list]):
+    try:
+        modules = parse_file(path)
+    except Exception as exc:
+        click.secho(
+            f"Could not parse {click.format_filename(path)}: {exc}",
+            fg="yellow",
+            err=True,
+        )
+        return
+    for module in modules:
+        files[module].append(path)
+
+
+def _cli_parse_dir(path: pathlib.Path, files: dict[str, list]):
+    for p in pathlib.Path(path).rglob('*.py'):
+        if p.is_file():
+            _cli_parse_file(p, files)
+
+
 @click.command()
 @click.argument(
     "paths",
-    type=click.Path(exists=True, dir_okay=False),
+    type=click.Path(exists=True, path_type=pathlib.Path),
     nargs=-1,
     required=False,
 )
@@ -86,26 +107,23 @@ def filter_modules(modules: Iterable[str], ignore: Iterable[str]):
 )
 @click.version_option(__version__, message="%(version)s")
 def _cli(
-    paths: list[str],
+    paths: list[pathlib.Path],
     ignore: list[str],
     ignore_relative: bool,
     ignore_stdlib: bool,
     show_files: bool,
 ):
-    """Search Python source file(s) for imported modules."""
+    """Search Python source file(s) in PATHS for imported modules.
+
+    Directories specified by PATHS are searched recursively for *.py files.
+    """
     files = defaultdict(list)
     for path in paths:
-        try:
-            modules = parse_file(path)
-        except Exception as exc:
-            click.secho(
-                f"Could not parse {click.format_filename(path)}: {exc}",
-                fg="yellow",
-                err=True,
-            )
-            continue
-        for module in modules:
-            files[module].append(path)
+        if path.is_dir():
+            _cli_parse_dir(path, files)
+        else:
+            _cli_parse_file(path, files)
+
     files = dict(files)
     imports = files.keys()
 
