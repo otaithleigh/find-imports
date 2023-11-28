@@ -9,9 +9,11 @@ Or use the CLI through [`pipx`](https://pypa.github.io/pipx/):
 
 ```
 $ pipx run find-imports --help
-Usage: find-imports [OPTIONS] [PATHS]...
+Usage: find_imports.py [OPTIONS] [PATHS]...
 
-  Search Python source file(s) for imported modules.
+  Search Python source file(s) in PATHS for imported modules.
+
+  Directories specified by PATHS are searched recursively for *.py files.
 
 Options:
   -i, --ignore MODULE             Ignore a module and all its submodules. This
@@ -80,10 +82,74 @@ click
 math
 ```
 
-Search a directory:
+Search a directory recursively:
 
 ``` sh
-$ find . -type f -name '*.py' | xargs python -m find_imports
+$ python -m find_imports dir/
+```
+
+Search a large package for all third-party imports, and show which files
+import them:
+
+``` sh
+$ git clone https://github.com/denavit/libdenavit-py
+$ python -m find_imports -RSf --ignore libdenavit libdenavit-py/src
+matplotlib.pyplot
+        libdenavit-py/src/libdenavit/OpenSees/get_fiber_data.py
+        libdenavit-py/src/libdenavit/OpenSees/plotting.py
+        libdenavit-py/src/libdenavit/OpenSees/uniaxial_material_analysis.py
+        libdenavit-py/src/libdenavit/camber.py
+        libdenavit-py/src/libdenavit/interaction_diagram_2d.py
+        libdenavit-py/src/libdenavit/non_sway_column_2d.py
+        libdenavit-py/src/libdenavit/section/RC.py
+        libdenavit-py/src/libdenavit/section/circle_shape.py
+        libdenavit-py/src/libdenavit/section/encased_composite.py
+        libdenavit-py/src/libdenavit/section/fiber_section.py
+        libdenavit-py/src/libdenavit/section/obround_shape.py
+        libdenavit-py/src/libdenavit/section/rectangle_shape.py
+        libdenavit-py/src/libdenavit/section/reinf.py
+        libdenavit-py/src/libdenavit/sway_column_2d.py
+numpy
+        libdenavit-py/src/libdenavit/OpenSees/fiber_section.py
+        libdenavit-py/src/libdenavit/camber.py
+        libdenavit-py/src/libdenavit/cross_section_2d.py
+        libdenavit-py/src/libdenavit/interaction_diagram_2d.py
+        libdenavit-py/src/libdenavit/joist.py
+        libdenavit-py/src/libdenavit/non_sway_column_2d.py
+        libdenavit-py/src/libdenavit/section/ACI_phi.py
+        libdenavit-py/src/libdenavit/section/ACI_strain_compatibility.py
+        libdenavit-py/src/libdenavit/section/RC.py
+        libdenavit-py/src/libdenavit/section/ccft.py
+        libdenavit-py/src/libdenavit/section/circle_shape.py
+        libdenavit-py/src/libdenavit/section/database/to_numpy.py
+        libdenavit-py/src/libdenavit/section/encased_composite.py
+        libdenavit-py/src/libdenavit/section/fiber_patches.py
+        libdenavit-py/src/libdenavit/section/fiber_section.py
+        libdenavit-py/src/libdenavit/section/obround_shape.py
+        libdenavit-py/src/libdenavit/section/rectangle_shape.py
+        libdenavit-py/src/libdenavit/section/reinf.py
+        libdenavit-py/src/libdenavit/sway_column_2d.py
+openseespy.opensees
+        libdenavit-py/src/libdenavit/OpenSees/fiber_section.py
+        libdenavit-py/src/libdenavit/OpenSees/get_fiber_data.py
+        libdenavit-py/src/libdenavit/OpenSees/plotting.py
+        libdenavit-py/src/libdenavit/OpenSees/uniaxial_material_analysis.py
+        libdenavit-py/src/libdenavit/cross_section_2d.py
+        libdenavit-py/src/libdenavit/non_sway_column_2d.py
+        libdenavit-py/src/libdenavit/section/RC.py
+        libdenavit-py/src/libdenavit/section/encased_composite.py
+        libdenavit-py/src/libdenavit/sway_column_2d.py
+pandas
+        libdenavit-py/src/libdenavit/section/database/to_numpy.py
+        libdenavit-py/src/libdenavit/section/fiber_section.py
+pint
+        libdenavit-py/src/libdenavit/unit_convert.py
+scipy.optimize
+        libdenavit-py/src/libdenavit/effective_length_factor.py
+        libdenavit-py/src/libdenavit/non_sway_column_2d.py
+        libdenavit-py/src/libdenavit/sway_column_2d.py
+shapely.geometry
+        libdenavit-py/src/libdenavit/interaction_diagram_2d.py
 ```
 
 ## Prior work
