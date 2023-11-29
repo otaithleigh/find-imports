@@ -27,6 +27,9 @@ requires-python = ">=3.10"
 
 dynamic = ["version"]
 
+[project.urls]
+Homepage = "https://github.com/otaithleigh/ls-imports"
+
 # Support "pipx run ls-imports" instead of injecting "ls-imports"
 # as a script into the user environment
 [project.entry-points."pipx.run"]
