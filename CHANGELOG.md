@@ -17,7 +17,7 @@ Initial release. Changes from `list-imports`:
 
 ### Changed
 
-- Rename module to `find_imports`
+- Rename module to `ls_imports`
 - Rename `get` to `parse_file`
 - Rename `parse` to `parse_source`, and allow passing a `filename` argument
   through to `ast.parse` for error messages

@@ -6,7 +6,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "find-imports"
+name = "ls-imports"
 authors = [
     {name = "Peter Talley", email = "peterctalley@gmail.com"}
 ]
@@ -27,13 +27,13 @@ requires-python = ">=3.10"
 
 dynamic = ["version"]
 
-# Support "pipx run find-imports" instead of injecting "find-imports"
+# Support "pipx run ls-imports" instead of injecting "ls-imports"
 # as a script into the user environment
 [project.entry-points."pipx.run"]
-find-imports = "find_imports:_cli"
+ls-imports = "ls_imports:_cli"
 
 [tool.setuptools.dynamic]
-version = {attr = "find_imports.__version__"}
+version = {attr = "ls_imports.__version__"}
 
 # ==============================================================================
 # Linting

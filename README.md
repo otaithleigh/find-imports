@@ -1,15 +1,15 @@
 ## Installation & Usage
 
 ``` sh
-$ pip install find-imports
-$ python -m find_imports ...
+$ pip install ls-imports
+$ python -m ls_imports ...
 ```
 
 Or use the CLI through [`pipx`](https://pypa.github.io/pipx/):
 
 ```
-$ pipx run find-imports --help
-Usage: find_imports.py [OPTIONS] [PATHS]...
+$ pipx run ls-imports --help
+Usage: ls_imports.py [OPTIONS] [PATHS]...
 
   Search Python source file(s) in PATHS for imported modules.
 
@@ -52,15 +52,15 @@ Setup:
 Parse imports from a file:
 
 ``` pycon
->>> import find_imports
->>> find_imports.parse_file('file.py')
+>>> import ls_imports
+>>> ls_imports.parse_file('file.py')
 ['math', 'ast', 'click', '.base']
 ```
 
 Parse imports from a string:
 
 ``` pycon
->>> find_imports.parse_source(source)
+>>> ls_imports.parse_source(source)
 ['math', 'ast', 'click', '.base']
 ```
 
@@ -69,14 +69,14 @@ Parse imports from a string:
 Exclude standard library modules:
 
 ``` sh
-$ python -m find_imports --ignore-stdlib file.py
+$ python -m ls_imports --ignore-stdlib file.py
 click
 ```
 
 Exclude relative imports:
 
 ``` sh
-$ python -m find_imports --ignore-relative file.py
+$ python -m ls_imports --ignore-relative file.py
 ast
 click
 math
@@ -85,7 +85,7 @@ math
 Search a directory recursively:
 
 ``` sh
-$ python -m find_imports dir/
+$ python -m ls_imports dir/
 ```
 
 Search a large package for all third-party imports, and show which files
@@ -93,7 +93,7 @@ import them:
 
 ``` sh
 $ git clone https://github.com/denavit/libdenavit-py
-$ python -m find_imports -RSf --ignore libdenavit libdenavit-py/src
+$ python -m ls_imports -RSf --ignore libdenavit libdenavit-py/src
 matplotlib.pyplot
         libdenavit-py/src/libdenavit/OpenSees/get_fiber_data.py
         libdenavit-py/src/libdenavit/OpenSees/plotting.py
