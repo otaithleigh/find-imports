@@ -9,7 +9,7 @@ Or use the CLI through [`pipx`](https://pypa.github.io/pipx/):
 
 ```
 $ pipx run ls-imports --help
-Usage: ls_imports.py [OPTIONS] [PATHS]...
+Usage: ls-imports [OPTIONS] [PATHS]...
 
   Search Python source file(s) in PATHS for imported modules.
 
