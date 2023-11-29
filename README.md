@@ -155,3 +155,6 @@ shapely.geometry
 ## Prior work
 
 Based on [`list-imports`](https://github.com/andrewp-as-is/list-imports.py).
+
+[`findimports`](https://github.com/mgedmin/findimports) is similar, but shows
+the reverse relation (for each file, shows the modules/names it imports).
