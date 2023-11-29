@@ -1,7 +1,7 @@
 Changelog
 =========
 
-[0.1.0] - 2023-11-28
+[0.1.1] - 2023-11-29
 --------------------
 
 Initial release. Changes from `list-imports`:

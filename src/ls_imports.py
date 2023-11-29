@@ -7,7 +7,7 @@ from typing import Iterable
 import click
 
 __all__ = ["parse_file", "parse_source"]
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 def parse_file(path: str | pathlib.Path):
