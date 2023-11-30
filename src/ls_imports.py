@@ -1,5 +1,6 @@
 import ast
 import pathlib
+import re
 import sys
 from collections import defaultdict
 from typing import Iterable
@@ -9,10 +10,41 @@ import click
 __all__ = ["parse_file", "parse_source"]
 __version__ = "0.1.1"
 
+_re_encoding_declaration = re.compile("^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)")
 
-def parse_file(path: str | pathlib.Path):
-    """Open a Python source file and return the modules it imports."""
-    with open(path) as f:
+
+def _detect_py_encoding(path: str | pathlib.Path):
+    # Ref: https://peps.python.org/pep-0263/
+
+    # Check for UTF-8 byte order mark
+    with open(path, "rb") as file:
+        if file.read(3) == b"\xef\xbb\xbf":
+            return "utf-8"
+
+    # Look for encoding declaration
+    with open(path) as file:
+        if match := _re_encoding_declaration.match(file.readline()):
+            return match.group(1)
+        elif match := _re_encoding_declaration.match(file.readline()):
+            return match.group(1)
+
+    return "utf-8"
+
+
+def parse_file(path: str | pathlib.Path, encoding: str | None = None):
+    """Open a Python source file and return the modules it imports.
+
+    Parameters
+    ----------
+    path : str, Path
+        Path to source file to parse.
+    encoding : str, optional
+        Encoding of file. If not provided, attempts to detect any encoding
+        specified using PEP 263 encoding declarations, falling back to UTF-8.
+    """
+    if encoding is None:
+        encoding = _detect_py_encoding(path)
+    with open(path, "r", encoding=encoding) as f:
         return parse_source(f.read(), path)
 
 
