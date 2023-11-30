@@ -8,7 +8,7 @@ from typing import Iterable
 import click
 
 __all__ = ["parse_file", "parse_source"]
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 _re_encoding_declaration = re.compile("^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)")
 
