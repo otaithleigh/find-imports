@@ -1,6 +1,16 @@
 Changelog
 =========
 
+[0.1.2] - 2023-11-29
+--------------------
+
+### Fixed
+
+- Detect Python source file encoding, falling back to UTF-8. Fixes parse errors
+  on Windows, where the default encoding for `open()` is cp1252 if not in UTF-8
+  mode.
+
+
 [0.1.1] - 2023-11-29
 --------------------
 
